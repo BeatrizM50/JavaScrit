@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+  <title>Gestión de Trabajadores</title>
+</head>
+<body>
+    <script>
+  let trabajador=[];
+
+  function Insertar (){
+   let ci = prompt("Ingrese carnet de identidad:");
+   let nombre= prompt("Ingrese el nombre :");
+   let apellido=prompt("Ingrese el apellido");
+   let edad= parseInt(prompt ("Ingrese la edad:"));
+   let salario= parseFloat(prompt ("Ingrese el salario:"));
+   let docente= prompt("¿Es docente? (si/no)").toLowerCase()==="si";
+   let categoria=  docente? prompt("Categoria cientifica(Mcs/Dr/ninguno)"): "ninguno";
+   let area=prompt ("Ingrese el area de trabajo:");
+
+    trabajador.push({ci,nombre,apellido,edad,salario,docente,categoria,area})
+    alert("Trabajador insertado");
+   menu();
+  }
+
+  function modificar() {
+    let ci = prompt("Nuevo Carnet de identidad:")
+    let Tra = trabajador.find(x => x.ci === ci)
+    if(!Tra){
+        alert("No se ha encontrado")
+        
+        return;
+    }
+    Tra.nombre = prompt("Nuevo Nombre", Tra.nombre)
+    Tra.apellido = prompt("Nuevo Apellido", Tra.apellido)
+    Tra.edad = prompt("Nuevo Edad", Tra.edad)
+    Tra.salario = prompt("Nuevo Salario", Tra.salario)
+    Tra.docente = prompt("Es docente(si/no)", Tra.docente? "si" : "no" ) === "si";
+    if(Tra.docente){
+    Tra.categoria = prompt("Que categoria? " , Tra.categoria)
+    }
+    Tra.area = prompt("Nueva Area:", Tra.area)
+    alert("Se ha modificado")
+     menu();
+  }
+
+     function eliminar(){
+     let ci=prompt("Ingrese el carnet de identidad del trabajador a eliminar:");
+     let i =trabajador.findIndex(x => x.ci === ci);
+     if(i=== -1){
+     alert("No se encuentra")
+     return; 
+    }
+     trabajador.splice(i,1);
+     alert ("Se ha eliminado correctamente");
+      menu();
+    }
+     function salarioMay(){
+      let salarioL = parseFloat(prompt("Introdusca el salario"));
+      let cant = trabajador.filter( Tra => Tra.salario > salarioL).length;
+      alert("Hay:"+cant+"Trabajadores con un salario superior a:"+salarioL );
+      menu(); 
+    }
+
+     function esDocente(){
+       let ci= prompt("Ingrese el numero de carnet");
+       let Tra=trabajador.find(x=>x.ci===ci);
+       if(!Tra){
+       alert("No fue encontrado ");  
+     }
+     
+     alert(Tra.nombre + " " + Tra.apellido + (Tra.docente ? " SÍ es docente" : " NO es docente"));
+    
+      menu(); 
+    }
+
+     function cantidadDoctores(){
+        let cantDr = trabajador.filter(Tra => Tra.docente && Tra.categoria.toLowerCase() === "dr").length;
+        alert("Hay:"+cantDr+ ":trabajadores que son Doctores " );
+       menu();
+      }
+     function promedioEdad(){
+      if(trabajador.length ===0 ){
+        alert("No se encuentra ningun trabajador");
+      return;
+     }  
+      let suma= trabajador.reduce((acumulador,Tra)=>acumulador + Tra.edad, 0 );
+      let prom= suma/trabajador.length;
+      alert("El promedio de edad es:" +prom.toFixed(2));
+       menu();
+    }
+    function buscarPorArea() {
+      let area = prompt("Área:");
+      let t = trabajador.find(x => x.area.toLowerCase() === area.toLowerCase());
+      if (!t) {
+        alert("No encontrado");
+        return;
+      }
+      alert("Trabajador en " + area + ": " + t.nombre + " " + t.apellido);
+     menu();
+    }
+    function guardar() {
+      let datos = JSON.stringify(trabajador, null, 2);
+      let blob = new Blob([datos], { type: "application/json" });
+      let url = URL.createObjectURL(blob);
+      let a = document.createElement("a");
+      a.href = url;
+      a.download = "trabajador.json";
+      a.click();
+        menu();    
+      }
+
+    function menu(){
+    let opcion;
+    do{
+     opcion=prompt( 
+          "MENÚ\n" +
+          "1. Insertar trabajador\n" +
+          "2. Modificar trabajador\n" +
+          "3. Eliminar trabajador\n" +
+          "4. Cantidad con salario mayor\n" +
+          "5. Decir si es docente\n" +
+          "6. Cantidad de doctores\n" +
+          "7. Promedio de edad\n" +
+          "8. Buscar trabajador por area\n" +
+          "9. Guardar datos en fichero\n" +
+          "0. Salir\n" );
+
+        switch(opcion){
+
+          case "1": Insertar();
+           break;
+          case "2": modificar();
+           break;
+          case "3": eliminar();
+           break;
+          case "4": salarioMay(); 
+          break;
+          case "5": esDocente();
+           break;
+          case "6": cantidadDoctores();
+           break;
+          case "7": promedioEdad(); 
+          break;
+          case "8": buscarPorArea(); 
+          break;
+          case "9": guardar();
+           break;
+          case "0": alert("Salir...");
+           break;
+          default: alert("Opción inválida");
+        }
+      } while (opcion !== "0");
+    }
+    menu();
+  </script>
+</body>
+</html>
+
+
+
+
+
+        
+
+
+
+
+
+  
